@@ -16,7 +16,8 @@ const store = new MongoDBStore({
 });
 
 const authRoutes = require('./routes/auth')
-const postRoutes = require('./routes/posts')
+const postRoutes = require('./routes/posts');
+const { protect } = require('./middleware/isAuth');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +29,9 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, sto
 app.use(postRoutes);
 app.use(authRoutes);
 
-
+app.get('/protected-route', protect, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.user });
+});
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log('Connected to MongoDB');
