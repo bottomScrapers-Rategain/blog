@@ -14,7 +14,7 @@ const store = new MongoDBStore({
   collection: 'sessions',
 });
 
-const loginRoutes = require('./routes/Login')
+const authRoutes = require('./routes/auth')
 
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(multer({ storage: fileStorage }).single('file'));
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
 // app.use(flash());
 
-app.use(loginRoutes);
+app.use(authRoutes);
 
 
 
