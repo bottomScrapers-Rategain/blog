@@ -1,27 +1,20 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
 
 exports.postRegister = async (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const username = req.body.username;
-
+    const { email, username, password } = req.body;
     try {
-        const userDoc = await User.findOne({ name: username });
+        const userDoc = await User.findOne({ email: email });
 
         if (userDoc) {
-            console.log('User already exists');
-            console.log(userDoc);
-            return res.redirect('/signup');
+            res.status(403).send('User already exists');
         }
-
-        const hashedPassword = await bcrypt.hash(password, 10); // Hashing the password
 
         const user = new User({
             email:email,
             username: username,
-            password: hashedPassword, // Storing the hashed password
+            password: password, // Storing the hashed password
         });
 
         const result = await user.save();
@@ -36,26 +29,22 @@ exports.postRegister = async (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
 
-    if (req.session.isLoggedIn) {
-        return res.redirect('/');
-    }
+    const { email, password } = req.body;
 
-    const name = req.body.name;
-    const password = req.body.password;
-    console.log(password);
+    console.log(email);
 
-    User.findOne({ name: name }).then(user => {
+    User.findOne({ email: email }).then(user => {
         if (!user) {
-            req.flash('error', 'Invalid username or password.');
-            return res.redirect('/');
+            return res.status(500).send('Internal server error');
         }
 
-        req.session.isLoggedIn = true;
+        req.session.authenticated = true;
         req.session.user = user;
-        return req.session.save(err => {
-            console.log(err);
-            res.redirect('/');
-        });
+        req.session.save();
+
+        const tokenUser = {email:email}
+        const token = jwt.sign(tokenUser,'secret');
+        return res.json({token:token});
     }).catch(err => {
         console.log(err);
     });

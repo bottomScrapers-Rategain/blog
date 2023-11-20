@@ -16,15 +16,16 @@ const store = new MongoDBStore({
 });
 
 const authRoutes = require('./routes/auth')
-
+const postRoutes = require('./routes/posts')
 app.use(cors());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(multer({ storage: fileStorage }).single('file'));
 // app.use(express.static("public"));
 // app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
 // app.use(flash());
-
+app.use(postRoutes);
 app.use(authRoutes);
 
 
