@@ -26,7 +26,7 @@ exports.postRegister = async (req, res, next) => {
 
         const result = await user.save();
         console.log(result);
-        res.redirect('/');
+        res.status(200).send(result);
     } catch (err) {
         console.log(err);
         // Handle error appropriately (e.g., show an error message)

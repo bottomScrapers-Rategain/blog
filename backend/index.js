@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -16,6 +17,7 @@ const store = new MongoDBStore({
 
 const authRoutes = require('./routes/auth')
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(multer({ storage: fileStorage }).single('file'));
 // app.use(express.static("public"));
