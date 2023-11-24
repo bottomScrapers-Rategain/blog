@@ -6,7 +6,7 @@ const Navbar = (props) => {
  const isAdminPanel = props.isAdminPanel;
 
   return (
-    <div className="bg-blue-primary px-4 py-3 mb-5 flex flex-row justify-between items-center sticky top-0">
+    <div className="bg-primary px-4 py-3 mb-5 flex flex-row justify-between items-center sticky top-0">
       <div className="text-4xl text-white font-semibold">MyBlog</div>
       <div className="flex flex-row gap-4 w-1/2 h-10">
         <input className="w-full h-full p-2 text-xl rounded" placeholder="Search for blogs..." type="text"></input>

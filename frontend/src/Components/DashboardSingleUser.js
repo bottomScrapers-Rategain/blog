@@ -1,6 +1,23 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 const DashboardSingleUser = () => {
+  const [posts, setPosts] = useState([]);
+
+  const getPosts = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/get-all-posts");
+      console.log(response.data);
+      setPosts(response.data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col gap-2 w-5/12 text-white ">
@@ -38,31 +55,13 @@ const DashboardSingleUser = () => {
         <div className="w-full flex flex-col gap-4 p-4 bg-dark-primary rounded-lg ">
           <div className="text-4xl font-semibold">Blogs</div>
           <div className="flex flex-col justify-start items-start gap-1 p-2 divide-y divide-slate-300 overflow-y-scroll">
-            <div className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
-              <Link>
-                <button className="text-blue-500">Top 5 Phones 2023</button>
-              </Link>
-            </div>
-            <div className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
-              <Link>
-                <button className="text-blue-500">Top 10 Sex Positions</button>
-              </Link>
-            </div>
-            <div className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
-              <Link>
-                <button className="text-blue-500">Review of Restaurant</button>
-              </Link>
-            </div>
-            <div className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
-              <Link>
-                <button className="text-blue-500 text-justify">Metallica Songs : Ranked Worst to Best</button>
-              </Link>
-            </div>
-            <div className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
-              <Link>
-                <button className="text-blue-500"></button>
-              </Link>
-            </div>
+            {posts.map((item, index) => (
+              <div key={index} className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
+                <Link to={`/post/${item.slug}`}>
+                  <button className="text-blue-500">{item.title}</button>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </div>
