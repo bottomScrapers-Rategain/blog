@@ -1,7 +1,7 @@
 import React from "react";
 import { LabelList, Pie, PieChart, Tooltip } from "recharts";
 
-const DashboardAnalytics = () => {
+const DashboardAnalytics = (props) => {
   const data01 = [
     {
       name: "Tech",
@@ -28,7 +28,7 @@ const DashboardAnalytics = () => {
       value: 96,
     },
   ];
-
+  const user = props.user;
   return (
     <>
       <div className="flex flex-col w-full h-full text-white p-4  rounded-lg bg-dark-primary">
@@ -49,6 +49,19 @@ const DashboardAnalytics = () => {
               <div className="text-xl ">Time spent</div>
               <div className="text-xl ">2.3 hr</div>
             </div>
+
+            {props.forSingleUser && (<>
+
+              {/* <div className=" flex flex-row gap-8 justify-start items-center">
+              <div className="text-xl ">Interests:</div>
+              <div className="text-xl ">{user.interests.join(',')}</div>
+            </div>
+            <div className=" flex flex-row gap-8 justify-start items-center">
+              <div className="text-xl ">Search Terms: </div>
+              <div className="text-xl ">{user.searchterms}</div>
+            </div> */}
+
+            </>)}
 
           </div>
           <div className="flex flex-col justify-center items-center">

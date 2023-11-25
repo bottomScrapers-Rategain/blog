@@ -14,10 +14,10 @@ exports.getUserByUid = async (req, res) => {
     try {
       const { uid } = req.body; // Access uid from req.body
       console.log(uid);
-      const user = await User.findOne({ uid });
+      const user = await User.findOne({ _id:uid });
   
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(500).json({ message: 'User not found' });
       }
   
       res.status(200).json(user);

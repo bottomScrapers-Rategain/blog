@@ -4,22 +4,14 @@ import { Link } from "react-router-dom";
 import AdvertisingContext from "../Contexts/advertisingContext";
 import UserContext from "../Contexts/userContext";
 
-const DashboardSingleUser = () => {
+const DashboardSingleUser = (props) => {
   const [posts, setPosts] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]); // State to hold selected advertising types
   const { advertisingType, setAdvertisingType } = useContext(AdvertisingContext);
   const {uid,setUid} = useContext(UserContext);
-  const [user,setUser] = useState(null);
+  const [user,setUser] = useState(props.user);
 
-  const getUser = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/get-user", { uid });
-      console.log(response.data);
-      setUser(response.data);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-    }
-  };
+
   
 
   const getPosts = async () => {
@@ -34,7 +26,6 @@ const DashboardSingleUser = () => {
 
   useEffect(() => {
     getPosts();
-    getUser();
   }, []);
 
   const saveHandler = () => {
@@ -43,6 +34,7 @@ const DashboardSingleUser = () => {
     const types = Array.from(checkboxes).map((checkbox) => checkbox.value);
     setSelectedTypes(types); // Set selected types to state
     setAdvertisingType(types); // Set selected types to context
+    alert('Advertising Type Saved');
   };
 
   return (
@@ -91,7 +83,7 @@ const DashboardSingleUser = () => {
             {posts.map((item, index) => (
               <div key={index} className="text-lg w-full p-1 duration-150 ease-in-out hover:bg-blue-100">
                 <Link to={`/post/${item.slug}`}>
-                  <button className="text-blue-500">{item.title}</button>
+                  <button className="text-blue-500 text-justify">{item.title}</button>
                 </Link>
               </div>
             ))}
