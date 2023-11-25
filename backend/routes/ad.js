@@ -2,6 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const adController = require('../controllers/adController')
-router.get('/behavioural-ad-category',adController.selectBehaviouralAdCategory);
-router.get('/contextual-ad-category',adController.selectContextualAdCategory);
+router.post('/behaviourads',adController.selectBehaviouralAdCategory);
+router.post('/contextualads',adController.selectContextualAdCategory);
 module.exports = router;

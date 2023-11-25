@@ -1,15 +1,18 @@
-const post = require("../models/post");
+const Post = require("../models/post");
 const User = require("../models/user");
-
+const axios=require('axios')
 exports.selectContextualAdCategory=async(req,res)=>{
     const {postId}=req.body;
-    const foundUser = await User.findOne({ _id: userId });
-    const post=await blog.findOne({_id:postId})
+    const post=await Post.findOne({_id:postId})
     if(!post){
         return res.status(404).json({message:"Post not foundd"})
     }
+    const response = await axios.post("http://127.0.0.1:6000/getads", {
+        interestList: ["media", "betting", "pet"],
+        });
     //parse the categories from the content
-    return res.status(200).json({message:" here are the categories",categories:"media,betting,pet"})
+    const ads=await response.data
+    return res.status(200).json({ads})
 }
 
 exports.selectBehaviouralAdCategory = async (req, res) => {
@@ -22,12 +25,23 @@ exports.selectBehaviouralAdCategory = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const userInteractions = await UserInteractions.find({ userId });
+        const userInterests = foundUser.interests;
+        const topCategories = userInterests.slice(0, 3);
 
-        // const topCategories = getTopBlogCategories(userInteractions);
-        const userInterests=foundUser.interests
-        const topCategories = categoryArray.slice(0, 3);
-        res.status(200).json({ topCategories });
+        // Fetch ads asynchronously
+        const response = await axios.post("http://127.0.0.1:6000/getads", {
+            interestList: topCategories,
+        });
+
+        // Check if the status code is not in the 2xx range
+        if (response.status < 200 || response.status >= 300) {
+            throw new Error(`Error fetching ads: ${response.statusText}`);
+        }
+
+        // Access the response data directly
+        const ads = response.data;
+
+        res.status(200).json({ ads });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
