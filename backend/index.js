@@ -38,6 +38,8 @@ app.get('/protected-route', protect, (req, res) => {
   res.json({ message: 'This is a protected route', user: req.user });
 });
 
+
+
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log('Connected to MongoDB');
     app.listen(5000);
