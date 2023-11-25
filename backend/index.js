@@ -19,6 +19,7 @@ const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts');
 const dashboardRoutes=require('./routes/dashboard')
 const adRoutes=require('./routes/ad')
+const userRoutes = require('./routes/users')
 const { protect } = require('./middleware/isAuth');
 
 app.use(cors());
@@ -30,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
 // app.use(flash());
 app.use(postRoutes);
+app.use(userRoutes);
 app.use(authRoutes);
 app.use(dashboardRoutes)
 app.use(searchRoutes)

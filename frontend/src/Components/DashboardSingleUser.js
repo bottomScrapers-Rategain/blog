@@ -1,8 +1,26 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AdvertisingContext from "../Contexts/advertisingContext";
+import UserContext from "../Contexts/userContext";
+
 const DashboardSingleUser = () => {
   const [posts, setPosts] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]); // State to hold selected advertising types
+  const { advertisingType, setAdvertisingType } = useContext(AdvertisingContext);
+  const {uid,setUid} = useContext(UserContext);
+  const [user,setUser] = useState(null);
+
+  const getUser = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/get-user", { uid });
+      console.log(response.data);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+  
 
   const getPosts = async () => {
     try {
@@ -16,7 +34,16 @@ const DashboardSingleUser = () => {
 
   useEffect(() => {
     getPosts();
+    getUser();
   }, []);
+
+  const saveHandler = () => {
+    // Get all checked checkboxes
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const types = Array.from(checkboxes).map((checkbox) => checkbox.value);
+    setSelectedTypes(types); // Set selected types to state
+    setAdvertisingType(types); // Set selected types to context
+  };
 
   return (
     <>
@@ -24,7 +51,7 @@ const DashboardSingleUser = () => {
         <div className="w-full flex flex-col gap-4 p-4 bg-dark-primary rounded-lg ">
           <div className="text-2xl font-semibold">
             Unique Identifier :{" "}
-            <span className="text-lg font-normal">1234567890</span>
+            <span className="text-lg font-normal">{uid}</span>
           </div>
           <div className="text-xl font-semibold">Select Type of Marketing</div>
           <div className="flex flex-row gap-4">
@@ -35,7 +62,7 @@ const DashboardSingleUser = () => {
                 name="behavioral"
                 value="Behavioral"
               />
-              <label className="text-lg font-semibold" for="behavioral">
+              <label className="text-lg font-semibold" htmlFor="behavioral">
                 Behavioral
               </label>
             </div>
@@ -46,10 +73,16 @@ const DashboardSingleUser = () => {
                 name="contextual"
                 value="contextual"
               />
-              <label className="text-lg font-semibold" for="contextual">
+              <label className="text-lg font-semibold" htmlFor="contextual">
                 Contextual
               </label>
             </div>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 rounded text-xl w-full px-4 py-1"
+              onClick={saveHandler} // Call saveHandler function on button click
+            >
+              Save
+            </button>
           </div>
         </div>
         <div className="w-full flex flex-col gap-4 p-4 bg-dark-primary rounded-lg ">

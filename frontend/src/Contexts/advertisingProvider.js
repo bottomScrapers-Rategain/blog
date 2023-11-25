@@ -1,14 +1,15 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
+import AdvertisingContext from "./advertisingContext";
 
-const advertisingContext = createContext();
 
 const AdvertisingProvider = (props) => {
-  const [advertisingType, setAdvertisingType] = useState("");
+  const [advertisingType, setAdvertisingType] = useState([]);
+
 
   return (
-    <advertisingContext.Provider value={{ advertisingType, setAdvertisingType }}>
+    <AdvertisingContext.Provider value={{ advertisingType, setAdvertisingType }}>
       {props.children}
-    </advertisingContext.Provider>
+    </AdvertisingContext.Provider>
   );
 };
 
