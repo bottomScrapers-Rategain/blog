@@ -30,7 +30,8 @@ const Post = () => {
   const getAds = async () => {
     try {
       const response = null;
-      if (advertisingType == "behavioral") {
+      console.log(advertisingType);
+      if (advertisingType[0] == "behavioral") {
         const data = { userId: "655b2d3e733ec08df58ed879" };
         response = await axios.post("http://localhost:5000/behaviourads", data);
       } else {
