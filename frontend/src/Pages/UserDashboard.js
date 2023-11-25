@@ -10,6 +10,7 @@ const UserDashboard = () => {
   
     const getUser = async () => {
       try {
+        console.log(uid)
         const response = await axios.post("http://localhost:5000/get-user", { uid });
         console.log(response.data);
         setUser(response.data);
@@ -24,7 +25,7 @@ const UserDashboard = () => {
     <div className="px-10 py-5 w-full bg-primary h-screen flex flex-col gap-10">
       <div className="flex flex-row h-full gap-10">
             <DashboardSingleUser user={user}/>
-            <DashboardAnalytics forSingleUser={true} user={user}/>
+            <DashboardAnalytics forSingleUser={true}/>
       </div>
     </div>
   );

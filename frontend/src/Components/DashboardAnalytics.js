@@ -1,5 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import { LabelList, Pie, PieChart, Tooltip } from "recharts";
+import UserContext from "../Contexts/userContext";
 
 const DashboardAnalytics = (props) => {
   const data01 = [
@@ -28,7 +30,22 @@ const DashboardAnalytics = (props) => {
       value: 96,
     },
   ];
-  const user = props.user;
+  const {uid,setUid} = useContext(UserContext);
+  const [user,setUser] = useState({});
+
+  const getUser = async () => {
+    try {
+      console.log(uid);
+      const response = await axios.post("http://localhost:5000/get-user", { uid });
+      console.log(response.data);
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+  useEffect(() => {
+      getUser();
+    }, []);
   return (
     <>
       <div className="flex flex-col w-full h-full text-white p-4  rounded-lg bg-dark-primary">
@@ -54,11 +71,11 @@ const DashboardAnalytics = (props) => {
 
               <div className=" flex flex-row gap-8 justify-start items-center">
               <div className="text-xl ">Interests:</div>
-              <div className="text-xl ">jewellery,pet,home</div>
+              <div className="text-xl ">{user.interests}</div>
             </div>
             <div className=" flex flex-row gap-8 justify-start items-center">
               <div className="text-xl ">Search Terms: </div>
-              <div className="text-xl ">fashion</div>
+              <div className="text-xl ">{user.searchterms}</div>
             </div>
 
             </>)}
