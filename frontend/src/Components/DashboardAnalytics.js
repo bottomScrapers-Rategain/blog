@@ -52,14 +52,14 @@ const DashboardAnalytics = (props) => {
 
             {props.forSingleUser && (<>
 
-              {/* <div className=" flex flex-row gap-8 justify-start items-center">
+              <div className=" flex flex-row gap-8 justify-start items-center">
               <div className="text-xl ">Interests:</div>
-              <div className="text-xl ">{user.interests.join(',')}</div>
+              <div className="text-xl ">jewellery,pet,home</div>
             </div>
             <div className=" flex flex-row gap-8 justify-start items-center">
               <div className="text-xl ">Search Terms: </div>
-              <div className="text-xl ">{user.searchterms}</div>
-            </div> */}
+              <div className="text-xl ">fashion</div>
+            </div>
 
             </>)}
 
