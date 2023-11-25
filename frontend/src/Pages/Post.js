@@ -1,12 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import AdvertisingContext from "../Contexts/advertisingContext";
 const Post = () => {
   const location = useLocation();
   const currentUrl = location.pathname;
   const slug = currentUrl.split("/")[2];
+  const { advertisingType, setAdvertisingType } =
+    useContext(AdvertisingContext);
 
+  const [ads, setAds] = useState([]);
   const [post, setPost] = useState({});
   const [like, setLike] = useState(false);
   const [dislike, setDislike] = useState(false);
@@ -23,40 +27,52 @@ const Post = () => {
       console.error("Error fetching posts:", error);
     }
   };
+  const getAds = async () => {
+    try {
+      const response = null;
+      if (advertisingType == "behavioral") {
+        const data = { userId: "655b2d3e733ec08df58ed879" };
+        response = await axios.post("http://localhost:5000/behaviourads", data);
+      } else {
+        const data = { postId: "655af9a90b14dd9a05aff470" };
+        response = await axios.post(
+          "http://localhost:5000/contextualads",
+          data
+        );
+      }
+
+      if (response) {
+        const res = response.data;
+        console.log(res);
+        setAds(res.adList);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
 
   useEffect(() => {
     getPost(slug);
+    getAds();
   }, [slug]);
 
-  useEffect(() => {
-    console.log(post);
-  }, [post]); // Add 'post' as a dependency to this useEffect
+
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <div className=" w-full flex flex-row gap-10">
         <div className="flex flex-col gap-6 w-3/12">
-          <div>
-            <button className="cursor-pointer  hover:bg-neutral-200 hover:brightness-75">
-              <img alt="" src="https://rategain2023.s3.ap-south-1.amazonaws.com/Ads/video%20games/11.png"/>
-            </button>
-          </div>
-          <div>
-            <button className="cursor-pointer  hover:bg-neutral-200 hover:brightness-75">
-              <img alt="" src="https://rategain2023.s3.ap-south-1.amazonaws.com/Ads/video%20games/11.png"/>
-            </button>
-          </div>
-          <div>
-            <button className="cursor-pointer  hover:bg-neutral-200 hover:brightness-75">
-              <img alt="" src="https://rategain2023.s3.ap-south-1.amazonaws.com/Ads/video%20games/11.png"/>
-            </button>
-          </div>
-          <div>
-            <button className="cursor-pointer  hover:bg-neutral-200 hover:brightness-75">
-              <img alt="" src="https://rategain2023.s3.ap-south-1.amazonaws.com/Ads/video%20games/11.png"/>
-            </button>
-          </div>
+          {ads.map((item, index) => (
+            <div key={index}>
+              <button className="cursor-pointer  hover:bg-neutral-200 hover:brightness-75">
+                <img
+                  alt=""
+                  src={item}
+                />
+              </button>
+            </div>
+          ))}
         </div>
         <div className="flex flex-col w-8/12 p-10 gap-6 justify-center items-center">
           <div className="text-4xl font-semibold">{post.title}</div>
@@ -98,7 +114,6 @@ const Post = () => {
             </div>
           </div>
         </div>
-        
       </div>
     </>
   );

@@ -3,7 +3,7 @@ import AdvertisingContext from "./advertisingContext";
 
 
 const AdvertisingProvider = (props) => {
-  const [advertisingType, setAdvertisingType] = useState([]);
+  const [advertisingType, setAdvertisingType] = useState("");
 
 
   return (

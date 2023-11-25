@@ -52,7 +52,7 @@ const DashboardSingleUser = (props) => {
                 type="checkbox"
                 id="behavioral"
                 name="behavioral"
-                value="Behavioral"
+                value="behavioral"
               />
               <label className="text-lg font-semibold" htmlFor="behavioral">
                 Behavioral
